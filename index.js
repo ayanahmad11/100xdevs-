@@ -11,6 +11,7 @@ function printToScreen(){
 }
 setTimeout(printToScreen,10*1000);
  count(1,1000)
+ console.log("next commit")
 
 // count(1,10000);
 // count(10000,2000000)
