@@ -6,6 +6,8 @@ function medicine1get(){
     return answer;
     // answer return is an object
 }
+//
+
 var medicine = medicine1get(); // so medicine is an object
 console.log(medicine)
 //**Output  Promise {pending} */
