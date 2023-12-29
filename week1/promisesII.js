@@ -1,19 +1,25 @@
+
 function promiseBody(resolve){
-
+    setTimeout(resolve,5000);
 }
+
 function medicine1get(){
-    var answer = new Promise(promiseBody)
-    return answer;
-    // answer return is an object
+    var answer = new Promise(promiseBody)      
+    return answer;                           // answer is an object
+    }
+function printThing(){
+    console.log("medicine 1 received")
 }
-//
-////sdksjdhfakeuwfyliuy 
 
-var medicine = medicine1get(); // so medicine is an object
+var medicine = medicine1get(); // so medicine is an object or promise on our case
 console.log(medicine)
 //**Output  Promise {pending} */
 
-// ...medicine.catch.apply.apply.apply.apply.apply.
-console.log(medicine.then)
+// after getting the promise
+medicine.then(printThing)
+// NOTE : In this the printThing function is not known to the 
+
+
+
 
 // console.log(Object.keys(medicine)) .. // return keys;
