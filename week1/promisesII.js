@@ -7,6 +7,7 @@ function medicine1get(){
     // answer return is an object
 }
 //
+////sdksjdhfakeuwfyliuy 
 
 var medicine = medicine1get(); // so medicine is an object
 console.log(medicine)
