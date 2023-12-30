@@ -6,7 +6,18 @@ Try running it for
 3. Sum from 1-1000000000
 Hint - use Date class exposed in JS
 */
+//  Sum ?? --> can be done using (n*(1+n))/2;
+// but for the question we calculate using for loop
+
 
 function calculateTime(n) {
-    return 0.01;
+    let s = new Date().getTime();
+    let sum=0;
+    for(let i=1;i<=n;i++)
+        sum+=i;
+    let e =new Date().getTime();
+
+    return ((e-s)/1000)
 }
+// console.log(calculateTime(10000))
+// console.log(calculateTime(1000000))// greater the value thread might block or get large amount of timex
