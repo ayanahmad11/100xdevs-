@@ -16,7 +16,6 @@ return patience
 let n=3;
 wait(n).then(printThing)
 // is similar to 
-// wait(n).then(printThing)
 // wait.then((resolve)=>{
     // console.log(resolve);
 // })
@@ -24,7 +23,7 @@ wait(n).then(printThing)
 // is used to fulfill the Promise after 3 second, 
 // indicating that the asynchronous operation represented 
 // by the Promise has completed successfully with the value 
-// 'Resolved after 1 second'.
+// 'Resolved after 3 second'.
 //  This value will be passed to the .then() 
 // block when this Promise is used.
 
