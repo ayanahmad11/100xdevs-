@@ -4,7 +4,11 @@ const app = express()
 const port = 3000
 
 function handleFirstRequest(req,res){
-    res.send('Hello WOrld!')
+    // res.send('Hello WOrld!')
+    var calculatedsum = sum(100) ;
+    console.log(calculatedsum);
+    var answer = "the sum is " + calculatedsum;
+    res.send(answer)
 
 }
 app.get('/',handleFirstRequest)
@@ -13,13 +17,12 @@ function started(){
 }
 app.listen(port,started)
 function sum  (counter){
-    sum=0;
+    let csum=0;
     for(var i=1;i<=counter;i++){
-        sum = sum + i;
+       csum = csum + i;
 
     }
-    return sum;
+    return csum;
 
 }
-var calculatedsum = sum(100) ;
-console.log(calculatedsum);
+
