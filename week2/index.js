@@ -5,6 +5,7 @@
 // use of get post methods
 // use of middleware
 const express = require('express')
+const fetch = require('node-fetch');
 const app = express()
 const port = 3000
 
@@ -35,8 +36,11 @@ function handleSecondRequest(req,res){
     // console.log(req.query.counter3)
     var calculatedsum = sum(counter) ;
     console.log(calculatedsum);
-    var answer = "the sum is " + calculatedsum;
-    res.send(answer)
+    // var answer = "the sum is " + calculatedsum;
+    var answerObject = {
+        sum:calculatedsum
+    }
+    res.send(answerObject)
 
 }
 
