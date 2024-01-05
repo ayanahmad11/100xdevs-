@@ -1,6 +1,6 @@
 //.. fetch(URl,object)
 // fetch is a library similar to fs and express
-// fetch lets you to send the request to http server {index.js} and get the response
+// fetch lets you to send the request to http server {index.js}and get the response
 // const fetch = require('node-fetch');
 // import fetch from 'node-fetch';
 
