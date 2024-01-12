@@ -1,5 +1,5 @@
 
-// creating a express server
+// creating an express server
 // use of query parameters
 // use of headers
 // use of get post methods
