@@ -9,7 +9,7 @@
   1.GET /todos - Retrieve all todo items
     Description: Returns a list of all todo items.
     Response: 200 OK with an array of todo items in JSON format.
-    Example: GET http://localhost:3000/todos
+    Example: GET http://localhost:3000/todos  
     
   2.GET /todos/:id - Retrieve a specific todo item by ID
     Description: Returns a specific todo item identified by its ID.
@@ -43,29 +43,34 @@
   const bodyParser = require('body-parser');
   const fs =  require('fs')
   const port = 3000
-  const path = require("path") 
+  const path = require("path")
+  const cors = require('cors');
+   
+   
   
   const app = express();
+  app.use(cors())
+
   app.use(bodyParser.json());
   
 
   
-//   function findIndex(arr,id){
-//   for(let i=0;i<arr.length;i++){
-//     if(arr[i].id==id)
-//       return i;
-//   }
-//   return -1;
-//   }
+  function findIndex(arr,id){
+  for(let i=0;i<arr.length;i++){
+    if(arr[i].id==id)
+      return i;
+  }
+  return -1;
+  }
   
-//   function removeAtIndex(arr,index){
-//    let newArray=[]
-//     for(let i=0;i<arr.length;i++){
-//       if(i !== index)
-//         newArray.push(arr[i])
-//     }
-//     return newArray;
-//   }
+  function removeAtIndex(arr,index){
+   let newArray=[]
+    for(let i=0;i<arr.length;i++){
+      if(i !== index)
+        newArray.push(arr[i])
+    }
+    return newArray;
+  }
  
   app.get('/todos',(req,res)=>{
          fs.readFile(__dirname+"/todos.json","utf-8",(err,data)=>{
@@ -76,7 +81,18 @@
        
   });
   
-  // app.get('/todos/:id',)
+  app.get('/todos/:id', (req, res) => {
+    fs.readFile("todos.json", "utf8", (err, data) => {
+      if (err) throw err;
+      const todos = JSON.parse(data);
+      const todoIndex = findIndex(todos, parseInt(req.params.id));
+      if (todoIndex === -1) {
+        res.status(404).send();
+      } else {
+        res.json(todos[todoIndex]);
+      }
+    });
+  });
   
   
   
@@ -98,17 +114,27 @@
         });
       })
     });
+    // let Todos = []
   
-//   app.delete('/todos/:id',(req,res)=>{
-//     const todoIndex = findIndex(todos,parseInt(req.params.id)); // bug/typo : params not param
-//     if(todoIndex === -1){
-//       res.status(404).send();
-//     }
-//     else{
-//       todos = removeAtIndex(todos,todoIndex)
-//       res.status(200).send();
-//     }
-//   });    
+ 
+    
+    app.delete('/todos/:id', (req, res) => {
+
+      fs.readFile("todos.json", "utf8", (err, data) => {
+        if (err) throw err;
+     let  todos = JSON.parse(data);
+        const todoIndex = findIndex(todos, parseInt(req.params.id));
+        if (todoIndex === -1) {
+          res.status(404).send();
+        } else {
+          todos = removeAtIndex(todos, todoIndex);
+          fs.writeFile("todos.json", JSON.stringify(todos), (err) => {
+            if (err) throw err;
+            res.status(200).send();
+          });
+        }
+      });
+    });   
   app.get('/',(req,res)=>{
     res.sendFile(path.join(__dirname,"index.html"));
   })

@@ -1,41 +1,176 @@
 <head>
     <title>
-        To Do App;
+        TODO app
     </title>
-    <script>
-        function parsedResponse(data){
-            console.log(data)
+</head>
+<script>
+    // function deleteDone(id){
+    //     console.log("delete done")
+    //     // Delete the right todo from the list 
+    //     // you will need to give each todo an id ,and that should be 
+    //     // enough to remove it;
+    //     console.log("id:"+id)
+    //     var todoElement = document.getElementById("todo-" + id);
+    //         if (todoElement) {
+    //             todoElement.remove();
+    //         }
+    //     // parentElement.removeChild(childElement)
+    // }
+    function deleteDone(id) {
+    console.log("delete done");
+
+    // Fetch the updated list of todos after successful deletion
+    fetch("http://localhost:3000/todos", {
+        method: "GET",
+    })
+    .then(resp => resp.json())
+    .then(data => {
+        // Clear the existing todos in the UI
+        var parentElement = document.getElementById("mainArea");
+        parentElement.innerHTML = "";
+
+        // Render the updated list of todos
+        todosCallback(data);
+    })
+    .catch(error => {
+        console.error("Error fetching todos after deletion:", error);
+    });
+}
+
+    function deleteTodo(id) {
+    console.log("id:" + id);
+    fetch("http://localhost:3000/todos/" + id, {
+        method: "DELETE"
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Failed to delete todo");
         }
-       function callback(resp){
-        resp.json().then(parsedResponse)
-       }
-       
-       function onPress(){
-            // alert("hi")
-            fetch("http://localhost:3000/todos",
-            {   method:"POST",
-            body:JSON.stringify({
-            title: "gym",
-            description:"go to gym at 7 "        
+
+        // Check if response has content before parsing as JSON
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+            return response.json();
+        } else {
+            return null; // No JSON content
+        }
+    })
+    .then(() => deleteDone(id))
+    .catch(error => {
+        console.error("Error deleting todo:", error);
+    });
+}
+    function createDeleteButton(id) {
+    var button = document.createElement("button");
+    button.innerHTML = "Delete";
+    button.addEventListener("click", function() {
+        deleteTodo(id);
+    });
+    return button;
+}
+    function todosCallback(data){
+        console.log(data)
+        var parentElement = document.getElementById("mainArea");
+        // parentElement.innerHTML = JSON.stringify(data); 
+         for(var i=0;i<data.length;i++){
+            var childElement = document.createElement("div");
+            childElement.setAttribute("id", "todo-" + data[i].id);
+            var grandchildElement1 = document.createElement("span");
+            grandchildElement1.innerHTML = data[i].title; 
+            
+            var grandchildElement2 = document.createElement("span");
+            grandchildElement2.innerHTML = data[i].description; 
+
+            // var grandchildElement3 = document.createElement("button");
+            // grandchildElement3.innerHTML = "Delete"
+            // grandchildElement3.setAttribute("onclick","deleteTodo("+ data[i].id + ")")
+            // grandchildElement3.addEventListener("click", function(){deleteTodo(data.id)});
+            grandchildElement3 = createDeleteButton(data[i].id);
+            
+            childElement.appendChild(grandchildElement1)
+            childElement.appendChild(grandchildElement2)
+            childElement.appendChild(grandchildElement3)
+
+            parentElement.appendChild(childElement);   
+        }
+         
+    }
+
+    function getDataCallback(resp){
+        resp.json().then(todosCallback)
+    }
+    function getData(){
+        fetch("http://localhost:3000/todos",{
+            method: "GET",
+        }).then(getDataCallback)
+    }
+    getData();
+
+    function parsedResponse(data) {
+        console.log(data);
+        // getData(); not optimal 
+        var parentElement = document.getElementById("mainArea");
+        var childElement = document.createElement("div");
+            var grandchildElement1 = document.createElement("span");
+            grandchildElement1.innerHTML = data.title; 
+            
+            var grandchildElement2 = document.createElement("span");
+            grandchildElement2.innerHTML = data.description; 
+
+            // var grandchildElement3 = document.createElement("button");
+            // grandchildElement3.innerHTML = "Delete"
+            // grandchildElement3.setAttribute("onclick","deleteTodo("+ data.id + ")")
+            // grandchildElement3.addEventListener("click", function(){deleteTodo(data.id)});
+            grandchildElement3 = createDeleteButton(data.id);
+            
+            childElement.appendChild(grandchildElement1)
+            childElement.appendChild(grandchildElement2)
+            childElement.appendChild(grandchildElement3)
+
+            parentElement.appendChild(childElement);
+    }
+ 
+    function callback(resp) {
+        resp.json().then(parsedResponse);
+    }
+
+    function onPress() {
+        var title = document.getElementById("title").value;
+        var description = document.getElementById("description").value;
+
+        if (title === "" || description === "") {
+             console.log("Title and description cannot be empty. Please fill in both fields.");
+            alert("Title and description cannot be empty. Please fill in both fields")
+             // You can display an error message to the user or take other actions.
+            return;
+        }
+        // console.log(title) 
+        // console.log(description) 
+        else {
+            fetch("http://localhost:3000/todos", {
+            method: "POST",
+            body: JSON.stringify({
+                title: title,
+                description: description
             }),
             headers: {
                 "Content-Type": "application/json"
             }
-
-            }).then(callback)
+        }).then(callback)
         }
-    </script>
-    <body>
-        
-        To do title
-        <input type="text" id="title"></input>
-        <br>
-        <br>
-        TO do Description
-        <input type="text" id="Description"></input>
-        <br>
-        <br>
-        <button onclick = "onPress()">send todo</button>
+       
+    }
 
-    </body>
-</head>
+</script>
+<body>
+    Todo title
+    <input type="text" id="title"></input>
+    <br><br>
+    Todo description
+    <input type="text" id="description"></input>
+    <br><br>
+    <button onclick="onPress()">send todo</button>
+    <div id="mainArea">
+        <!-- Hi there -->
+    </div>
+</body>
