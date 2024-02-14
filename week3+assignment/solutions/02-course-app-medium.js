@@ -60,6 +60,8 @@ app.post('/admin/login', (req, res) => {
 
 app.post('/admin/courses', authenticateJwt, (req, res) => {
   const course = req.body;
+  // earlier req.headers["usename"] contains it 
+  // console.log(req.user.username)
   course.id = COURSES.length + 1; 
   COURSES.push(course);
   res.json({ message: 'Course created successfully', courseId: course.id });
