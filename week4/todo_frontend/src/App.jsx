@@ -15,7 +15,7 @@ var todos ={
 
 function App() {
   // declaring state variable
-  // const [component , state]
+  // const [component , state] = useState({ *initial state})
   const [todos,setTodo] =  useState({
     title:"go eat something ",
     description:"eat food",
