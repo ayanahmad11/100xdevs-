@@ -1,57 +1,34 @@
-import { useState } from "react";
-
-var todos ={
-  title :"Go to GYM",
-  description :"go to gumm11",
-  id:1 
-
-}
-// setInterval(()=>{       // it will not work because it is not the way or it is not a state variable
-//   todos.title = "abcd", 
-//   todos.description = "no";
-// },1000);
+import React,{ useState } from "react";
 
 
 
 function App() {
-  // declaring state variable
-  // const [component , state] = useState({ *initial state})
-  const [todos,setTodo] =  useState({
-    title:"go eat something ",
-    description:"eat food",
+  const[todoforToday,setTodoforToday]= React.useState({
+    title : "Go to Gym",
+    description : "Hit gym from 7-9",
     id:1
   });
-  setInterval(()=>{
-    setTodo({
-      title:"title is changed",
-      description:"description is changed",
-      id :2
-    })
-  },2000)
- 
+  console.log("above useeffect")
+  React.useEffect(()=>{
+    console.log("hi from useEffect ");
+    setInterval(()=>{
+      setTodoforToday({
+        title : "used use effect",
+        description:"it is a hook",
+        id:3
+      })
+    },5000)
+   
 
+  },[]);
   return (
-    <>
-     <h5>hi there</h5>
-      {todos.title}<br>
-      </br>
-      {todos.description}
-      <br></br>
-      {todos.id}
-      <Personname firstname={"shahalam"} lastname ={"ajaz"} ></Personname> 
-     {/* props are like arguments */}
-      
-      <Personname firstname={todos.title} lastname = {todos.description}></Personname>
-    </>
+    <div>
+        {todoforToday.title}
+          <br></br> 
+        {todoforToday.description}
+    </div>
   )
-} 
-
-function Personname(props){    // this is a component
-  return <div>      
-    {props.firstname} 
-    <br></br>
-    {props.lastname}
-  </div>
 }
+
 
 export default App
