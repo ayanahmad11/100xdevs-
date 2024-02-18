@@ -1,3 +1,6 @@
+
+
+//////
 import { useState } from "react";
 
 // var todo ={
@@ -15,16 +18,26 @@ import { useState } from "react";
 
 
 function App() {
-  const[todoforToday,setTodoforToday]= React.useState({
-    title : "Go to Gym",
-    description : "Hit gym from 7-9",
+  // declaring state variable
+  // const [component , state] = useState({ *initial state})
+  const [todos,setTodo] =  useState([{
+    title:"go eat something ",
+    description:"eat food",
     id:1
-  });
-  React.useEffect(()=>{
-
-    console.log("hi from useEffect ");
+  },{ 
+    title:"go to room  ",
+  description:"sit on the table",
+  id:1
     
-  })
+  }]);
+  // setInterval(()=>{
+  //   setTodo({
+  //     title:"title is changed",
+  //     description:"description is changed",
+  //     id :2
+  //   })
+  // },2000)
+ 
 
   return (
     <div>
