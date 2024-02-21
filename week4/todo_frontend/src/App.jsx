@@ -1,31 +1,43 @@
 import React,{ useState } from "react";
 
+// hook or custom hook
+function usetodos(){
+  const[todos,setTodos]= React.useState([]);
 
+ 
+  React.useEffect(()=>{
+   
+    fetch("http://localhost:3000/todos").then((response)=>{
+      response.json().then((data)=>{
+        console.log(data);
+        setTodos(data)
+      })
+    })  
+    setInterval(()=>{
+      fetch("http://localhost:3000/todos").then((response)=>{
+        response.json().then((data)=>{
+          console.log(data);
+          setTodos(data)
+        })
+      }) 
+    },1000)
+  
+  },[]);
+  return todos;
+}
 
 function App() {
-  const[todoforToday,setTodoforToday]= React.useState({
-    title : "Go to Gym",
-    description : "Hit gym from 7-9",
-    id:1
-  });
-  console.log("above useeffect")
-  React.useEffect(()=>{
-    console.log("hi from useEffect ");
-    setInterval(()=>{
-      setTodoforToday({
-        title : "used use effect",
-        description:"it is a hook",
-        id:3
-      })
-    },5000)
-   
-
-  },[]);
+  const todos = usetodos();
   return (
     <div>
-        {todoforToday.title}
-          <br></br> 
-        {todoforToday.description}
+        {todos.map(todo => {
+            return  <div>
+                {todo.title}
+                {todo.description}  
+                 <button>delete</button> 
+                 <br/>
+              </div>
+        })}
     </div>
   )
 }
