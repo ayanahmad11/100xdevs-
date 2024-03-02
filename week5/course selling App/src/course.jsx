@@ -1,14 +1,17 @@
 import { useEffect,useState } from "react";
 import {useParams} from "react-router-dom";
 import {Typography,Card,TextField,Button} from '@mui/material';
-import {Course} from "./courses.jsx"
+import { atom,useSetRecoilState,useRecoilValue,useRecoilState } from 'recoil';
+
 
 
 function Course1(){
     
+    console.log("course")
+    
     let { courseId } = useParams();
     
-    const[courses,setCourses] = useState([]);
+    const setCourses = useSetRecoilState(coursesState);
 
     useEffect(() => {
         function callback2(data){
@@ -26,26 +29,12 @@ function Course1(){
             }
         }).then(callback1)
     },[]);
-   
-    let course =null;
-    for(let i=0;i<courses.length;i++){
-        if(courses[i].id==courseId)
-            {
-                course = courses[i];
-            }
-    }
 
-    if(!course){
-        return <div>
-            Loading...
-        </div>
-    }
-   
     return <div style={{display:"flex" , flexWrap:"wrap",justifyContent:"center"}} >
        
-        <Course course = {course} ></Course>
+        <CourseCard courseId ={courseId} ></CourseCard>
         
-        <UpdateCard courses = {courses} course = {course} setCourses =  {setCourses}></UpdateCard>
+        <UpdateCard courseId ={courseId} />
        
         {/* {JSON.stringify(courses)}
         {courseId}
@@ -53,15 +42,46 @@ function Course1(){
         {JSON.stringify(course)} */}
 
     </div>
-    
+
+    function CourseCard(props){
+
+       console.log("course card")
+        
+        const courses = useRecoilValue(coursesState)
+        let course =null;
+        for(let i=0;i<courses.length;i++){
+            if(courses[i].id==props.courseId)
+              {
+                   course = courses[i];
+              }
+        }
+        if(!course)
+        {
+            return "lloadung "
+        }
+         
+       return  <div style={{display:"flex", justifyContent:"center"}}>
+                <Card style = {{
+          
+          margin :10,
+          width : 300,
+          minHeight:200 
+      }} >
+         <Typography textAlign={"center"}variant="h6">{course.title} </Typography> 
+         <Typography textAlign={"center"} variant="subtitle1" >{course.description }</Typography>
+          <img src={course.imagelink} style= {{width:300}}></img>
+          </Card>
+        </div>
+   }
     
     function UpdateCard(props){
-    
+        console.log("hi there from updatedCard")
         const [title,setTitle] = useState("");
         const [description,setdescription] = useState("");
         const [image,setImage] = useState("");
         const course = props.course;
-  
+        const [courses,setCourses] = useRecoilState(coursesState); 
+        console.log("update card rerendered")
             return <div>
                     <div style={{display:"flex", justifyContent:"center"}}>
                         
@@ -102,10 +122,10 @@ function Course1(){
                                             alert("courses updated")
                                             // console.log(data);
                                             let UpdatedCourses = [];
-                                            for(let i=0;i<props.courses.length;i++){
-                                                if(props.courses[i].id == course.id ){
+                                            for(let i=0;i<courses.length;i++){
+                                                if(courses[i].id == props.courseId ){
                                                     UpdatedCourses.push({
-                                                        id: course.id,
+                                                        id: props.courseId,
                                                         title : title,
                                                         description : description,
                                                         imagelink : image
@@ -113,15 +133,15 @@ function Course1(){
                                                     
                                                 }
                                                 else{
-                                                    UpdatedCourses.push(props.courses[i]);
+                                                    UpdatedCourses.push(courses[i]);
                                                 }
                                                 
                                             }
-                                            props.setCourses(UpdatedCourses);
+                                         setCourses(UpdatedCourses);
                                         })
                                     }
                                     
-                                    fetch("http://localhost:3000/admin/courses/" + course.id,{
+                                    fetch("http://localhost:3000/admin/courses/" + props.courseId,{
                                         method:"PUT",
                                         body: JSON.stringify({
                                                 title,
@@ -150,3 +170,11 @@ function Course1(){
 
 }
 export default Course1;
+
+const coursesState = atom(
+    {
+        key : 'coursesState',
+        default :'',
+
+    }
+);

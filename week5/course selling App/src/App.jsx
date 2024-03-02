@@ -5,6 +5,13 @@ import Appbar from './Appbar.jsx';
 import Addcourse from './Addcourse.jsx';
 import Courses from './courses.jsx';
 import Course1 from './course';
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from 'recoil';
 // import { useHistory } from 'react-router';
 // import { useHistory } from 'react-router-dom';
 
@@ -18,8 +25,8 @@ function App() {
       <div style={{width:"100vw",
       height:"100vh",
       backgroundColor:"#eeeeee"}}>
-      
-          <Router>
+        <RecoilRoot>
+        <Router>
            <Appbar/>
             <Routes>
                 <Route path = {"/course/:courseId"} element = {<Course1/>} />
@@ -32,6 +39,9 @@ function App() {
             </Routes>
         </Router>
 
+
+        </RecoilRoot>
+          
       </div>
       
     );
