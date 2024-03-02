@@ -1,10 +1,14 @@
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import {Card,Typography} from '@mui/material';
+import { useState } from 'react';
 function Signup(props){
-    return <div>
-       
+    // any variable that dynamically changes should be defined as below
+    const [email , setemail] = useState("");
+    const [password,setpassword] = useState("");
 
+    
+    return <div>
         
             <div style={{
               paddingTop :150  ,
@@ -30,22 +34,55 @@ function Signup(props){
                     padding:20
                     }}>
 
-                    < TextField fullWidth={true}
-                    id="outlined-basic"
+                    < TextField 
+                    onChange = {(e)=>{
+                        setemail(e.target.value)
+                    }}
+                     fullWidth={true}
+                    id={"username"}
                     label="Email"
                     variant="outlined" />
                     <br></br>
                     <br></br>
 
-                    <TextField fullWidth={true} 
-                    id="outlined-basic"
+                    <TextField
+                    onChange={(e)=>{
+                        setpassword(e.target.value)
+                    }}
+                    fullWidth={true} 
+                    id={"password"}
                     label="Password"
                     variant="outlined" />
 
                     <br></br>
                     <br></br>
 
-                    <Button size={"large"} variant="contained">Sign up</Button>
+                    <Button 
+                    size={"large"}
+                    variant="contained"
+                    onClick={()=>{
+                        function callback1(res){
+                            res.json().then((data)=>{
+                                localStorage.setItem("token",data.token)
+                                window.location = "/"
+                                console.log(data);
+
+                            })
+                        }
+                        
+                        fetch("http://localhost:3000/admin/signup",{
+                               method:"POST",
+                            body: JSON.stringify({
+                                username:email,
+                                password:password
+                            }), // headers are sent because otherwise body won't be parsed
+                            headers: { 
+                              "Content-type": "application/json"      
+                            }
+                        }).then(callback1)
+                        console.log(username); 
+                    }}
+                    >Sign up</Button>
 
         </Card>
               
